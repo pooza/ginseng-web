@@ -1,5 +1,3 @@
-require 'addressable/uri'
-
 module Ginseng
   module Web
     class ThinDaemon < Ginseng::Daemon
@@ -27,7 +25,7 @@ module Ginseng
 
       def root_uri
         unless @uri
-          @uri = Addressable::URI.new
+          @uri = Ginseng::URI.new
           @uri.host = environment_class.hostname
           @uri.scheme = 'http'
           @uri.port = @config['/thin/port']
