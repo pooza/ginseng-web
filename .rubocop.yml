@@ -14,6 +14,9 @@ Style/DoubleNegation:
 Style/FormatStringToken:
   EnforcedStyle: template
 
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
 Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
@@ -124,6 +127,3 @@ Metrics/CyclomaticComplexity:
 
 Metrics/PerceivedComplexity:
   Max: 10
-
-Naming/RescuedExceptionsVariableName:
-  PreferredName: e
