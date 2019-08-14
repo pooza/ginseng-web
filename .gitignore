@@ -4,5 +4,4 @@
 Thumbs.db
 ._*
 .fuse*
-config/local.yaml
-config/local.yml
+config/local.*

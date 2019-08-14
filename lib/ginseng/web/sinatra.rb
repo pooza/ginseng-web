@@ -18,17 +18,17 @@ module Ginseng
         })
       end
 
-      def before_post
-        @params = JSON.parse(@body).with_indifferent_access
-      rescue JSON::ParserError
-        @params = params.clone.with_indifferent_access
-      end
-
       before do
         @renderer = default_renderer_class.new
-        @headers = request.env.select{|k, v| k.start_with?('HTTP_')}
         @body = request.body.read.to_s
-        before_post if request.request_method == 'POST'
+        @headers = request.env.select{|k, v| k.start_with?('HTTP_')}.map do |k, v|
+          [k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).gsub('_', '-'), v]
+        end.to_h
+        begin
+          @params = JSON.parse(@body).with_indifferent_access
+        rescue JSON::ParserError
+          @params = params.clone.with_indifferent_access
+        end
         @logger.info({request: {path: request.path, params: @params}})
       end
 
@@ -63,7 +63,7 @@ module Ginseng
       private
 
       def default_renderer_class
-        return 'Ginseng::Web::JSONRenderer'.constantize
+        return JSONRenderer
       end
     end
   end
