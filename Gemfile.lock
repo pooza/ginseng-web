@@ -19,7 +19,7 @@ GIT
 PATH
   remote: .
   specs:
-    ginseng-web (1.0.4)
+    ginseng-web (1.0.5)
       rack-test
       sass
       sinatra
