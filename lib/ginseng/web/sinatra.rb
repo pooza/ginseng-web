@@ -25,7 +25,7 @@ module Ginseng
         end.to_h
         begin
           @params = Yajl::Parser.new.parse(@body).with_indifferent_access
-        rescue => e
+        rescue
           @params = params.clone.with_indifferent_access
         end
         @logger.info(request: {path: request.path, params: @params})
