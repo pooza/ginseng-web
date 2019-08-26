@@ -1,5 +1,4 @@
 require 'sinatra'
-require 'json'
 
 module Ginseng
   module Web
@@ -11,11 +10,11 @@ module Ginseng
         super
         @config = config_class.instance
         @logger = logger_class.new
-        @logger.info({
+        @logger.info(
           message: 'starting...',
           server: {port: @config['/thin/port']},
           version: package_class.version,
-        })
+        )
       end
 
       before do
@@ -25,11 +24,11 @@ module Ginseng
           [k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).gsub('_', '-'), v]
         end.to_h
         begin
-          @params = JSON.parse(@body).with_indifferent_access
-        rescue JSON::ParserError
+          @params = Yajl::Parser.new.parse(@body).with_indifferent_access
+        rescue => e
           @params = params.clone.with_indifferent_access
         end
-        @logger.info({request: {path: request.path, params: @params}})
+        @logger.info(request: {path: request.path, params: @params})
       end
 
       after do

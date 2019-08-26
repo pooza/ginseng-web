@@ -1,5 +1,3 @@
-require 'json'
-
 module Ginseng
   module Web
     class JSONRenderer < Renderer
