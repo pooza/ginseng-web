@@ -23,11 +23,7 @@ module Ginseng
         @headers = request.env.select{|k, v| k.start_with?('HTTP_')}.map do |k, v|
           [k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).gsub('_', '-'), v]
         end.to_h
-        begin
-          @params = Yajl::Parser.new.parse(@body).with_indifferent_access
-        rescue
-          @params = params.clone.with_indifferent_access
-        end
+        @params = (JSON.parse(@body) || params).with_indifferent_access
         @logger.info(request: {path: request.path, params: @params})
       end
 
