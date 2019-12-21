@@ -20,7 +20,7 @@ module Ginseng
       before do
         @renderer = default_renderer_class.new
         @body = request.body.read.to_s
-        @headers = request.env.select{|k, v| k.start_with?('HTTP_')}.map do |k, v|
+        @headers = request.env.select {|k, v| k.start_with?('HTTP_')}.map do |k, v|
           [k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).gsub('_', '-'), v]
         end.to_h
         begin
@@ -52,7 +52,7 @@ module Ginseng
         e = Error.create(e)
         @renderer = default_renderer_class.new
         @renderer.status = e.status
-        @renderer.message = e.to_h.delete_if{|k, v| k == :backtrace}
+        @renderer.message = e.to_h.delete_if {|k, v| k == :backtrace}
         @renderer.message['error'] = e.message
         Slack.broadcast(e.to_h) unless e.status == 404
         @logger.error(e.to_h)
