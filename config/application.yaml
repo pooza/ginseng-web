@@ -1,5 +1,5 @@
 package:
-  version: 1.0.6
+  version: 1.0.7
   url: https://github.com/pooza/ginseng-web
   authors:
     - Tatsuya Koishi
@@ -7,11 +7,3 @@ package:
     - tkoishi@b-shock.co.jp
   description: ginseng PostgreSQL libraries
   license: MIT
-cert:
-  url: https://curl.haxx.se/ca/cacert.pem
-error:
-  backtrace:
-    level: 5
-youtube:
-  urls:
-    videos: https://www.googleapis.com/youtube/v3/videos
