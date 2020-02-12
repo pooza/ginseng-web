@@ -1,5 +1,5 @@
 require 'yaml'
-package = YAML.load_file(File.join(__dir__, 'config/application.yaml'))['package']
+package = YAML.load_file(File.join(__dir__, 'config/lib.yaml'))['package']
 
 Gem::Specification.new do |spec|
   spec.name = 'ginseng-web'
@@ -16,5 +16,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rack-test'
   spec.add_dependency 'sass'
   spec.add_dependency 'sinatra'
-  spec.add_dependency 'thin'
 end

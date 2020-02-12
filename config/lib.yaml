@@ -1,5 +1,5 @@
 package:
-  version: 1.0.7
+  version: 1.1.0
   url: https://github.com/pooza/ginseng-web
   authors:
     - Tatsuya Koishi
@@ -7,3 +7,5 @@ package:
     - tkoishi@b-shock.co.jp
   description: ginseng PostgreSQL libraries
   license: MIT
+thin:
+  port: 3014
