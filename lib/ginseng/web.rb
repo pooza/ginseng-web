@@ -1,7 +1,5 @@
-require 'active_support'
-require 'active_support/core_ext'
-require 'active_support/dependencies/autoload'
 require 'ginseng'
+require 'active_support/dependencies/autoload'
 
 module Ginseng
   module Web
