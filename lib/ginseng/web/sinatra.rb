@@ -20,9 +20,9 @@ module Ginseng
       before do
         @renderer = default_renderer_class.new
         @body = request.body.read.to_s
-        @headers = request.env.select {|k, v| k.start_with?('HTTP_')}.map do |k, v|
-          [k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-'), v]
-        end.to_h
+        @headers = request.env.select {|k, v| k.start_with?('HTTP_')}.transform_keys do |k|
+          k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
+        end
         begin
           @params = JSON.parse(@body).with_indifferent_access
         rescue
