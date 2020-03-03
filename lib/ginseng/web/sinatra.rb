@@ -12,7 +12,7 @@ module Ginseng
         @logger = logger_class.new
         @logger.info(
           message: 'starting...',
-          server: {port: @config['/thin/port']},
+          server: {port: @config['/puma/port']},
           version: package_class.version,
         )
       end
