@@ -13,15 +13,12 @@ module Ginseng
     autoload :Sinatra
     autoload :Template
 
-    autoload_under 'daemon' do
-      autoload :ThinDaemon
-    end
-
     autoload_under 'renderer' do
       autoload :CSSRenderer
       autoload :HTMLRenderer
       autoload :JSONRenderer
       autoload :XMLRenderer
+      autoload :SlimRenderer
     end
   end
 end
