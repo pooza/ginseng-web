@@ -5,7 +5,10 @@ AllCops:
   DisplayCopNames: true
   Exclude:
     - '**/._*'
-  TargetRubyVersion: 2.7
+    - '.git/**/*'
+    - 'public/**/*'
+    - 'tmp/**/*'
+  TargetRubyVersion: 2.6
 
 Style/FrozenStringLiteralComment:
   Enabled: false
@@ -22,6 +25,9 @@ Layout/ParameterAlignment:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyle: space
 
@@ -35,6 +41,9 @@ Layout/SpaceInsideHashLiteralBraces:
 
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 
 Metrics/AbcSize:
   Max: 30
@@ -132,3 +141,25 @@ Metrics/PerceivedComplexity:
 
 Naming/RescuedExceptionsVariableName:
   PreferredName: e
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
