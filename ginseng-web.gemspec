@@ -12,10 +12,14 @@ Gem::Specification.new do |spec|
   spec.license = package['license']
   spec.metadata['homepage_uri'] = package['url']
   spec.require_paths = ['lib']
+  spec.required_ruby_version = '>=2.6'
 
   spec.add_dependency 'puma'
-  spec.add_dependency 'rack-test'
   spec.add_dependency 'sass'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'slim'
+  spec.add_development_dependency 'rack-test'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-performance'
+  spec.add_development_dependency 'test-unit'
 end
