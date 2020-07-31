@@ -14,6 +14,7 @@ module Ginseng
     autoload :Template
 
     autoload_under 'renderer' do
+      autoload :AtomFeedRenderer
       autoload :CSSRenderer
       autoload :HTMLRenderer
       autoload :JSONRenderer

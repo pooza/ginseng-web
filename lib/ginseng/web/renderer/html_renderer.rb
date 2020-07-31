@@ -46,15 +46,16 @@ module Ginseng
       private
 
       def escape(value)
-        if value.is_a?(Array)
+        case value
+        when Array
           value.each_with_index do |v, i|
             value[i] = escape(v)
           end
-        elsif value.is_a?(Enumerable)
+        when Enumerable
           value.each do |k, v|
             value[k] = escape(v)
           end
-        elsif value.is_a?(String)
+        when String
           value = ERB::Util.html_escape(value)
         end
         return value
