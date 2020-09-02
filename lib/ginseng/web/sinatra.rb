@@ -10,11 +10,6 @@ module Ginseng
         super
         @config = config_class.instance
         @logger = logger_class.new
-        @logger.info(
-          message: 'starting...',
-          server: {port: @config['/puma/port']},
-          version: package_class.version,
-        )
       end
 
       before do
