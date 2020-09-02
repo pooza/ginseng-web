@@ -15,6 +15,7 @@ module Ginseng
         @status = 200
         @params = {}.with_indifferent_access
         self.template = template if template
+        super()
       end
 
       def template=(name)
@@ -43,7 +44,7 @@ module Ginseng
       private
 
       def create_path(name)
-        return File.join(environment_class.dir, 'views', name.sub(/\.slim$/i, '') + '.slim')
+        return File.join(environment_class.dir, 'views', "#{name.sub(/\.slim$/i, '')}.slim")
       end
 
       def shortcuts
