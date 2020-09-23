@@ -9,3 +9,7 @@ package:
   license: MIT
 puma:
   port: 3014
+test:
+  filters:
+    - name: ci
+      cases: []
