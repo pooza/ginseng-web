@@ -12,6 +12,8 @@ module Ginseng
     autoload :Renderer
     autoload :Sinatra
     autoload :Template
+    autoload :TestCase
+    autoload :TestCaseFilter
 
     autoload_under 'renderer' do
       autoload :AtomFeedRenderer
@@ -20,6 +22,10 @@ module Ginseng
       autoload :JSONRenderer
       autoload :XMLRenderer
       autoload :SlimRenderer
+    end
+
+    autoload_under 'test_case_filter' do
+      autoload :CITestCaseFilter
     end
   end
 end

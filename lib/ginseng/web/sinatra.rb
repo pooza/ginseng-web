@@ -1,10 +1,14 @@
 require 'sinatra'
+require 'sinatra/reloader'
 
 module Ginseng
   module Web
     class Sinatra < Sinatra::Base
       include Package
       set :root, Environment.dir
+      configure :development do
+        register ::Sinatra::Reloader
+      end
 
       def initialize
         super
