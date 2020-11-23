@@ -9,6 +9,7 @@ module Ginseng
       def initialize(template = nil)
         Slim::Engine.set_options(
           shortcut: shortcuts,
+          pretty: environment_class.development?,
         )
         @config = config_class.instance
         @logger = logger_class.new

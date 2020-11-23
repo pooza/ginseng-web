@@ -21,7 +21,7 @@ module Ginseng
       end
 
       def test_to_s
-        assert_equal(@renderer.to_s, '<!DOCTYPE html><html><head><title>SlimRenderer test</title></head><body><div>SlimRenderer</div></body></html>')
+        assert_equal(@renderer.to_s, "<!DOCTYPE html>\n<html>\n  <head>\n    <title>SlimRenderer test</title>\n  </head>\n  <body>\n    <div>\n      SlimRenderer\n    </div>\n  </body>\n</html>")
       end
     end
   end
