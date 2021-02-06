@@ -2,18 +2,22 @@ name: test
 on:
   - push
 env:
-  CI: "true"
+  CI: 'true'
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: ${{ matrix.ruby }}
+    strategy:
+      matrix:
+        ruby:
+          - ruby:2.6
+          - ruby:2.7
+          - ruby:3.0
     steps:
       - uses: actions/checkout@v2
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.6
       - name: bundle install
         run: |
-          gem install bundler
+          gem install bundler -v '~>2.1.0'
           bundle install --jobs 4 --retry 3
           bundle exec rake bundle:update
           bundle exec rake bundle:check
