@@ -1,0 +1,6 @@
+inflections:
+  ci_test_case_filter: CITestCaseFilter
+  css_renderer: CSSRenderer
+  html_renderer: HTMLRenderer
+  json_renderer: JSONRenderer
+  xml_renderer: XMLRenderer
