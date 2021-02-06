@@ -1,31 +1,20 @@
-require 'ginseng'
-require 'active_support/dependencies/autoload'
+require 'bundler/setup'
 
 module Ginseng
   module Web
-    extend ActiveSupport::Autoload
-
-    autoload :Config
-    autoload :Environment
-    autoload :Logger
-    autoload :Package
-    autoload :Renderer
-    autoload :Sinatra
-    autoload :Template
-    autoload :TestCase
-    autoload :TestCaseFilter
-
-    autoload_under 'renderer' do
-      autoload :AtomFeedRenderer
-      autoload :CSSRenderer
-      autoload :HTMLRenderer
-      autoload :JSONRenderer
-      autoload :XMLRenderer
-      autoload :SlimRenderer
+    def self.dir
+      return File.expand_path('../..', __dir__)
     end
 
-    autoload_under 'test_case_filter' do
-      autoload :CITestCaseFilter
+    def self.loader
+      config = YAML.load_file(File.join(dir, 'config/autoload.yaml'))
+      loader = Zeitwerk::Loader.new
+      loader.inflector.inflect(config['inflections'])
+      loader.push_dir(File.join(dir, 'lib/ginseng/web'), namespace: Ginseng::Web)
+      return loader
     end
+
+    Bundler.require
+    loader.setup
   end
 end
