@@ -1,12 +1,4 @@
 require 'bundler/setup'
-require 'active_support'
-require 'active_support/core_ext'
-
-ActiveSupport::Inflector.inflections do |inflect|
-  inflect.acronym 'HTML'
-  inflect.acronym 'XML'
-  inflect.acronym 'CSS'
-end
 
 module Ginseng
   module Web
