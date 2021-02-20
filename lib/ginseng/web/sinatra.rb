@@ -4,7 +4,7 @@ module Ginseng
   module Web
     class Sinatra < Sinatra::Base
       include Package
-      set :root, Environment.dir
+      set :root, environment_class.dir
 
       def initialize
         super
@@ -45,12 +45,14 @@ module Ginseng
 
       error do |e|
         e = Error.create(e)
+        e.package = package_class.name
         @renderer = default_renderer_class.new
         @renderer.status = e.status
-        @renderer.message = e.to_h.delete_if {|k, v| k == :backtrace}
+        @renderer.message = e.to_h
+        @renderer.message.delete(:backtrace)
         @renderer.message['error'] = e.message
-        Slack.broadcast(e.to_h) unless e.status == 404
-        @logger.error(e.to_h)
+        Slack.broadcast(e)
+        @logger.error(error: e)
         return @renderer.to_s
       end
 
