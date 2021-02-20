@@ -4,7 +4,7 @@ module Ginseng
   module Web
     class Sinatra < Sinatra::Base
       include Package
-      set :root, environment_class.dir
+      set :root, Environment.dir
 
       def initialize
         super
