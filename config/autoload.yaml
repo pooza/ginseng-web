@@ -4,3 +4,8 @@ inflections:
   html_renderer: HTMLRenderer
   json_renderer: JSONRenderer
   xml_renderer: XMLRenderer
+entries:
+  - path: lib/ginseng/web
+    namespace: Ginseng::Web
+  - path: lib/ginseng/web/renderer
+    namespace: Ginseng::Web
