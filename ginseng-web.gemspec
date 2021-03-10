@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sass'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'slim'
+  spec.add_dependency 'uglifier'
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'
