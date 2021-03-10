@@ -1,3 +1,4 @@
+require 'execjs'
 require 'uglifier'
 
 module Ginseng
