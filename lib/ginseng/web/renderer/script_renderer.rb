@@ -15,7 +15,7 @@ module Ginseng
         return File.join(dir, "#{name}.js")
       end
 
-      def dir 
+      def dir
         return File.join(environment_class.dir, 'public')
       end
 
