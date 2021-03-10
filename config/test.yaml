@@ -1,4 +1,4 @@
 filters:
   - name: ci
     cases:
-      - script_renderer
+      - script_renderer_test
