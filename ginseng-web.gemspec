@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>=2.6'
 
-  spec.add_dependency 'puma'
+  spec.add_dependency 'puma', '<5.2.1'
   spec.add_dependency 'rss'
   spec.add_dependency 'sass'
   spec.add_dependency 'sinatra'
