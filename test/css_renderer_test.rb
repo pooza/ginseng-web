@@ -17,7 +17,7 @@ module Ginseng
       end
 
       def test_to_s
-        assert_equal(@renderer.to_s.gsub(/\s/, ''), 'body{width:800px;}')
+        assert_equal(@renderer.to_s.chomp, 'body{width:800px}')
       end
     end
   end

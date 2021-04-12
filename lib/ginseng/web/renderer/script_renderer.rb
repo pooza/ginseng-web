@@ -24,7 +24,20 @@ module Ginseng
       end
 
       def to_s
-        return Uglifier.new(harmony: true).compile(File.read(path))
+        source = File.read(path)
+        return uglifier.compile(source) if uglifier
+        return source
+      end
+
+      def uglifier
+        unless @uglifier
+          @uglifier = Uglifier.new(harmony: true)
+          @uglifier.compile('alert(1)')
+        end
+        return @uglifier
+      rescue ExecJS::RuntimeError
+        @uglifier = nil
+        return nil
       end
     end
   end
