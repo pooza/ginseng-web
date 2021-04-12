@@ -30,7 +30,7 @@ module Ginseng
           ['pre', 'textarea'].each do |element|
             pattern = Regexp.new("<#{element}.*?>.*?</\s*?#{element}.*?>", Regexp::MULTILINE)
             @template.to_s.match(pattern) do |matched|
-              key = Zlib.adler32(matched[0])
+              key = matched[0].adler32.to_s
               storage[key] = matched[0]
               @content.sub!(matched[0], key)
             end
