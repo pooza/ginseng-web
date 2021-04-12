@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'puma', '<5.2.1'
   spec.add_dependency 'rss'
-  spec.add_dependency 'sass'
+  spec.add_dependency 'sassc'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'slim'
   spec.add_development_dependency 'rack-test'
