@@ -1,4 +1,4 @@
-require 'sass'
+require 'sassc'
 
 module Ginseng
   module Web
@@ -8,7 +8,7 @@ module Ginseng
       def template=(name)
         path = File.join(environment_class.dir, "views/#{name}.sass")
         raise RenderError, "Template file #{name} not found" unless File.exist?(path)
-        @template = Sass::Engine.new(File.read(path))
+        @template = SassC::Engine.new(File.read(path), {syntax: :sass, style: :compressed})
       end
 
       def type
