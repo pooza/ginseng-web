@@ -3,7 +3,7 @@ require 'time'
 
 module Ginseng
   module Web
-    class AtomFeedRenderer < Renderer
+    class FeedRenderer < Renderer
       include Package
       attr_reader :entries, :channel
 
@@ -21,16 +21,16 @@ module Ginseng
       end
 
       def type
-        return 'application/atom+xml; charset=UTF-8'
+        raise ImplementError, "'#{__method__}' not implemented"
       end
 
       def push(values)
         entries.push(values.to_h)
-        @atom = nil
+        @feed = nil
       end
 
-      def atom
-        @atom ||= RSS::Maker.make('atom') do |maker|
+      def feed
+        @feed ||= RSS::Maker.make(feed_type) do |maker|
           maker.items.do_sort = true
           maker.channel.id = channel[:link]
           channel.each {|k, v| maker.channel.send("#{k}=", v)}
@@ -40,11 +40,15 @@ module Ginseng
             end
           end
         end
-        return @atom
+        return @feed
+      end
+
+      def feed_type
+        raise ImplementError, "'#{__method__}' not implemented"
       end
 
       def to_s
-        return atom.to_s
+        return feed.to_s
       end
     end
   end
