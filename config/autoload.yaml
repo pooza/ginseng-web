@@ -3,6 +3,7 @@ inflections:
   css_renderer: CSSRenderer
   html_renderer: HTMLRenderer
   json_renderer: JSONRenderer
+  rss20_feed_renderer: RSS20FeedRenderer
   xml_renderer: XMLRenderer
 entries:
   - path: lib/ginseng/web

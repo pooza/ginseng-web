@@ -1,12 +1,12 @@
 module Ginseng
   module Web
-    class AtomFeedRendererTest < Test::Unit::TestCase
+    class RSS20FeedRendererTest < Test::Unit::TestCase
       def setup
-        @renderer = AtomFeedRenderer.new
+        @renderer = RSS20FeedRenderer.new
       end
 
       def test_type
-        assert_equal(@renderer.type, 'application/atom+xml; charset=UTF-8')
+        assert_equal(@renderer.type, 'application/rss+xml; charset=UTF-8')
       end
 
       def test_status
@@ -16,7 +16,7 @@ module Ginseng
       end
 
       def test_to_s
-        assert(@renderer.to_s.include?('<feed xmlns="http://www.w3.org/2005/Atom"'))
+        assert(@renderer.to_s.include?('<rss version="2.0"'))
       end
     end
   end
