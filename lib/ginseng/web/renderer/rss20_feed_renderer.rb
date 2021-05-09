@@ -1,6 +1,11 @@
 module Ginseng
   module Web
     class RSS20FeedRenderer < FeedRenderer
+      def initialize(channel = {})
+        super
+        @http = HTTP.new
+      end
+
       def type
         return 'application/rss+xml; charset=UTF-8'
       end
@@ -21,6 +26,18 @@ module Ginseng
           end
         end
         return @feed
+      end
+
+      private
+
+      def fetch_image(uri)
+        return nil unless uri
+        response = @http.get(uri)
+        return {
+          url: uri.to_s,
+          type: response.headers['content-type'],
+          length: response.headers['content-length'],
+        }
       end
     end
   end
