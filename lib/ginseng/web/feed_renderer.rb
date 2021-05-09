@@ -30,20 +30,6 @@ module Ginseng
       end
 
       def feed
-        @feed ||= RSS::Maker.make(feed_type) do |maker|
-          maker.items.do_sort = true
-          maker.channel.id = channel[:link]
-          channel.each {|k, v| maker.channel.send("#{k}=", v)}
-          entries.each do |entry|
-            maker.items.new_item do |item|
-              entry.each {|k, v| item.send("#{k}=", v)}
-            end
-          end
-        end
-        return @feed
-      end
-
-      def feed_type
         raise ImplementError, "'#{__method__}' not implemented"
       end
 
