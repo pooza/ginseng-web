@@ -25,8 +25,12 @@ module Ginseng
       end
 
       def push(values)
-        entries.push(values.to_h)
+        entries.push(values.to_h.deep_symbolize_keys)
         @feed = nil
+      end
+
+      def entries=(entries)
+        entries.each {|v| push(v)}
       end
 
       def feed
