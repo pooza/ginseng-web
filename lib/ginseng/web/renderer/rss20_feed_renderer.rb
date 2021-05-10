@@ -17,12 +17,14 @@ module Ginseng
           channel.each {|k, v| maker.channel.send("#{k}=", v)}
           entries.each do |entry|
             maker.items.new_item do |item|
-              if info = fetch_image(entry.dig('enclosure', 'url'))
+              if info = fetch_image(entry.dig(:enclosure, :url))
                 info.each {|k, v| item.enclosure.send("#{k}=", v)}
-                entry.delete('enclosure')
+                entry.delete(:enclosure)
               end
               entry.each {|k, v| item.send("#{k}=", v)}
             end
+          rescue => e
+            @logger.error(error: e, entry: entry)
           end
         end
         return @feed
@@ -38,6 +40,9 @@ module Ginseng
           type: response.headers['content-type'],
           length: response.headers['content-length'],
         }
+      rescue => e
+        @logger.error(error: e, uri: uri.to_s)
+        return nil
       end
     end
   end

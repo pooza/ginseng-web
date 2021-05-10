@@ -14,6 +14,8 @@ module Ginseng
             maker.items.new_item do |item|
               entry.each {|k, v| item.send("#{k}=", v)}
             end
+          rescue => e
+            @logger.error(error: e, entry: entry)
           end
         end
         return @feed
