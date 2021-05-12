@@ -9,10 +9,11 @@ module Ginseng
 
       def initialize(channel = {})
         super()
+        channel.deep_symbolize_keys!
         @channel = {
-          title: package_class.name,
-          link: package_class.url,
-          description: package_class.description,
+          title: channel[:title] || package_class.name,
+          link: channel[:link] || package_class.url,
+          description: channel[:description] || package_class.description,
           author: package_class.authors.first,
           date: Time.now,
           generator: package_class.user_agent,

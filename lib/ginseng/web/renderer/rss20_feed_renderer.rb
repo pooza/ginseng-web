@@ -4,6 +4,8 @@ module Ginseng
       def initialize(channel = {})
         super
         @http = HTTP.new
+        @http.retry_limit = 2
+        @http.base_uri = channel[:link]
       end
 
       def type
