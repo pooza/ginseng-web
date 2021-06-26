@@ -21,5 +21,5 @@ end
 
 desc 'test all'
 task :test do
-  Ginseng::Web::TestCase.load
+  Ginseng::Web::TestCase.load((ARGV.first&.split(/[^[:word:],]+/) || [])[1])
 end
