@@ -1,5 +1,4 @@
 require 'rss'
-require 'time'
 
 module Ginseng
   module Web
