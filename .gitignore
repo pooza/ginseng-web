@@ -1,8 +1,10 @@
-.bundle/
+.bundle
 .DS_Store
 Thumbs.db
 ._*
 .fuse*
-config/local.*
+*.log
 .sass-cache
+dist
 Gemfile.lock
+.ruby-version
