@@ -18,7 +18,6 @@ module Ginseng
 
       def test_to_s
         assert(@renderer.to_s, 'class ActivityIndicator')
-        assert_equal(@renderer.to_s.split("\n").length, 1) if @renderer.uglifier
       end
     end
   end

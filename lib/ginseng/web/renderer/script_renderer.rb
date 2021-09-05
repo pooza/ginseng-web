@@ -1,5 +1,3 @@
-require 'uglifier'
-
 module Ginseng
   module Web
     class ScriptRenderer < Renderer
@@ -24,20 +22,7 @@ module Ginseng
       end
 
       def to_s
-        source = File.read(path)
-        return uglifier.compile(source) if uglifier
-        return source
-      end
-
-      def uglifier
-        unless @uglifier
-          @uglifier = Uglifier.new(harmony: true)
-          @uglifier.compile('alert(1)')
-        end
-        return @uglifier
-      rescue ExecJS::RuntimeError
-        @uglifier = nil
-        return nil
+        return File.read(path)
       end
     end
   end
