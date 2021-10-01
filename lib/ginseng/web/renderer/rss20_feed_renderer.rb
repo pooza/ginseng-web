@@ -23,7 +23,7 @@ module Ginseng
                 info.each {|k, v| item.enclosure.send("#{k}=", v)}
                 entry.delete(:enclosure)
               end
-              entry.each {|k, v| item.send("#{k}=", v)}
+              entry.except(:enclosure).each {|k, v| item.send("#{k}=", v)}
             end
           rescue => e
             @logger.error(error: e, entry: entry)
