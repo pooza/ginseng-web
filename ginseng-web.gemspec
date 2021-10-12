@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>=2.6'
 
   spec.add_dependency 'erb'
-  spec.add_dependency 'puma', '>=5.3.0'
+  spec.add_dependency 'puma', '>=5.5.1' # CVE-2021-41136
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'sinatra'
