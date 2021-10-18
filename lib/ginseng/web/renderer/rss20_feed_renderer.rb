@@ -20,8 +20,7 @@ module Ginseng
           entries.each do |entry|
             maker.items.new_item do |item|
               if info = fetch_image(entry.dig(:enclosure, :url))
-                info.each {|k, v| item.enclosure.send("#{k}=", v)}
-                entry.delete(:enclosure)
+                info.slice(:type, :length, :url).each {|k, v| item.enclosure.send("#{k}=", v)}
               end
               entry.except(:enclosure).each {|k, v| item.send("#{k}=", v)}
             end
