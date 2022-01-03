@@ -11,8 +11,9 @@ Gem::Specification.new do |spec|
   spec.homepage = package['url']
   spec.license = package['license']
   spec.metadata['homepage_uri'] = package['url']
+  spec.metadata['rubygems_mfa_required'] = 'true'
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>=2.6'
+  spec.required_ruby_version = '>=3.0'
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=5.5.1' # CVE-2021-41136
