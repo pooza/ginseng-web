@@ -23,7 +23,12 @@ module Ginseng
         rescue
           @params = params.with_indifferent_access
         end
-        @logger.info(request: {path: request.path, params: @params})
+        @logger.info(request: {
+          method: request.request_method,
+          path: request.path,
+          params: @params,
+          remote: request.ip,
+        })
       end
 
       after do
