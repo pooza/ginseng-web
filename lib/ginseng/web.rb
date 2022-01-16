@@ -1,7 +1,10 @@
 require 'bundler/setup'
+require 'ginseng/web/refines'
 
 module Ginseng
   module Web
+    using Refines
+
     def self.dir
       return File.expand_path('../..', __dir__)
     end
