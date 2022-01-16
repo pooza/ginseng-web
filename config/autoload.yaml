@@ -2,6 +2,7 @@ inflections:
   ci_test_case_filter: CITestCaseFilter
   css_renderer: CSSRenderer
   html_renderer: HTMLRenderer
+  http: HTTP
   json_renderer: JSONRenderer
   rss20_feed_renderer: RSS20FeedRenderer
   xml_renderer: XMLRenderer
