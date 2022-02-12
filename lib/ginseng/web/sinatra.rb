@@ -15,7 +15,7 @@ module Ginseng
       before do
         @renderer = default_renderer_class.new
         @body = request.body.read.to_s
-        @headers = request.env.select {|k, v| k.start_with?('HTTP_')}.transform_keys do |k|
+        @headers = request.env.select {|k, _v| k.start_with?('HTTP_')}.transform_keys do |k|
           k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
         end
         begin
