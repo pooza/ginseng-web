@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'ricecream'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-minitest'
   spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'rubocop-rake'
   spec.add_development_dependency 'test-unit'
