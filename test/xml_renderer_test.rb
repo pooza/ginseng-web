@@ -12,21 +12,21 @@ module Ginseng
       end
 
       def test_type
-        assert_equal(@renderer.type, 'application/xml; charset=UTF-8')
+        assert_equal('application/xml; charset=UTF-8', @renderer.type)
       end
 
       def test_status
-        assert_equal(@renderer.status, 200)
+        assert_equal(200, @renderer.status)
         @renderer.status = 404
-        assert_equal(@renderer.status, 404)
+        assert_equal(404, @renderer.status)
       end
 
       def test_message
-        assert_equal(@renderer.message, 'hoge message')
+        assert_equal('hoge message', @renderer.message)
       end
 
       def test_to_s
-        assert_equal(@renderer.to_s, %(<?xml version='1.0' encoding='UTF-8'?><result><message>hoge message</message></result>))
+        assert_equal(%(<?xml version='1.0' encoding='UTF-8'?><result><message>hoge message</message></result>), @renderer.to_s)
       end
     end
   end

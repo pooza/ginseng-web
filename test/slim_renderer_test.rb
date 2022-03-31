@@ -7,13 +7,13 @@ module Ginseng
       end
 
       def test_type
-        assert_equal(@renderer.type, 'text/html; charset=UTF-8')
+        assert_equal('text/html; charset=UTF-8', @renderer.type)
       end
 
       def test_status
-        assert_equal(@renderer.status, 200)
+        assert_equal(200, @renderer.status)
         @renderer.status = 404
-        assert_equal(@renderer.status, 404)
+        assert_equal(404, @renderer.status)
       end
 
       def test_params
@@ -21,7 +21,7 @@ module Ginseng
       end
 
       def test_to_s
-        assert_equal(@renderer.to_s, "<!DOCTYPE html>\n<html>\n  <head>\n    <title>SlimRenderer test</title>\n  </head>\n  <body>\n    <div>\n      SlimRenderer\n    </div>\n  </body>\n</html>")
+        assert_equal("<!DOCTYPE html>\n<html>\n  <head>\n    <title>SlimRenderer test</title>\n  </head>\n  <body>\n    <div>\n      SlimRenderer\n    </div>\n  </body>\n</html>", @renderer.to_s)
       end
     end
   end

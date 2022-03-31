@@ -6,17 +6,17 @@ module Ginseng
       end
 
       def test_type
-        assert_equal(@renderer.type, 'application/rss+xml; charset=UTF-8')
+        assert_equal('application/rss+xml; charset=UTF-8', @renderer.type)
       end
 
       def test_status
-        assert_equal(@renderer.status, 200)
+        assert_equal(200, @renderer.status)
         @renderer.status = 404
-        assert_equal(@renderer.status, 404)
+        assert_equal(404, @renderer.status)
       end
 
       def test_to_s
-        assert(@renderer.to_s.include?('<rss version="2.0"'))
+        assert_includes(@renderer.to_s, '<rss version="2.0"')
       end
     end
   end
