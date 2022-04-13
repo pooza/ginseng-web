@@ -27,14 +27,17 @@ module Ginseng
           @content = @template.to_s
           storage = {}
           ['pre', 'textarea'].each do |element|
-            pattern = Regexp.new("<#{element}.*?>.*?</\s*?#{element}.*?>", Regexp::MULTILINE)
+            pattern = Regexp.new(
+              "<#{element}.*?>.*?</[[:blank:]]*?#{element}.*?>",
+              Regexp::MULTILINE,
+            )
             @template.to_s.match(pattern) do |matched|
               key = matched[0].adler32
               storage[key] = matched[0]
               @content.sub!(matched[0], key)
             end
           end
-          @content.gsub!(/^\s+/, '')
+          @content.gsub!(/^[[:blank:]]+/, '')
           storage.map do |k, v|
             @content.sub!(k, v)
           end
