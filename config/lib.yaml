@@ -1,11 +1,11 @@
 package:
-  version: 1.3.25
-  url: https://github.com/pooza/ginseng-web
   authors:
     - Tatsuya Koishi
+  description: ginseng Web libraries
   email:
     - tkoishi@b-shock.co.jp
-  description: ginseng Web libraries
   license: MIT
+  url: https://github.com/pooza/ginseng-web
+  version: 1.3.26
 puma:
   port: 3014

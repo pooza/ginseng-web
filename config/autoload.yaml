@@ -1,3 +1,8 @@
+entries:
+  - namespace: Ginseng::Web
+    path: lib/ginseng/web
+  - namespace: Ginseng::Web
+    path: lib/ginseng/web/renderer
 inflections:
   ci_test_case_filter: CITestCaseFilter
   css_renderer: CSSRenderer
@@ -6,8 +11,3 @@ inflections:
   json_renderer: JSONRenderer
   rss20_feed_renderer: RSS20FeedRenderer
   xml_renderer: XMLRenderer
-entries:
-  - path: lib/ginseng/web
-    namespace: Ginseng::Web
-  - path: lib/ginseng/web/renderer
-    namespace: Ginseng::Web

@@ -1,4 +1,0 @@
-filters:
-  - name: ci
-    cases:
-      - script_renderer_test
