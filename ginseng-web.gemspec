@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=5.6.4' # CVE-2022-24790
+  spec.add_dependency 'rack', '>=2.2.3.1' # CVE-2022-30123
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'sinatra'
