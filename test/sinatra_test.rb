@@ -16,6 +16,7 @@ module Ginseng
       def test_about
         header 'User-Agent', Package.user_agent
         get '/about'
+
         assert_predicate(last_response, :ok?)
         assert_equal(%("#{Package.name} #{Package.version}"), last_response.body)
       end
@@ -23,6 +24,7 @@ module Ginseng
       def test_not_found
         header 'User-Agent', Package.user_agent
         get '/not_found'
+
         assert_false(last_response.ok?)
         assert_equal(404, last_response.status)
       end

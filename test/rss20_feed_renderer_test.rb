@@ -12,6 +12,7 @@ module Ginseng
       def test_status
         assert_equal(200, @renderer.status)
         @renderer.status = 404
+
         assert_equal(404, @renderer.status)
       end
 

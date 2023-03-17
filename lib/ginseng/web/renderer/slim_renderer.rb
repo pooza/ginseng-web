@@ -57,7 +57,7 @@ module Ginseng
 
       def assign_values
         return {
-          params: params,
+          params:,
           slim: SlimRenderer,
         }
       end

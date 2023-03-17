@@ -25,7 +25,7 @@ module Ginseng
               entry.except(:enclosure).each {|k, v| item.send("#{k}=", v)}
             end
           rescue => e
-            @logger.error(error: e, entry: entry)
+            @logger.error(error: e, entry:)
           end
         end
         return @feed
