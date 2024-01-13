@@ -9,10 +9,10 @@ module Ginseng
         @feed ||= RSS::Maker.make('atom') do |maker|
           maker.items.do_sort = true
           maker.channel.id = channel[:link]
-          channel.each {|k, v| maker.channel.send("#{k}=", v)}
+          channel.each {|k, v| maker.channel.send(:"#{k}=", v)}
           entries.each do |entry|
             maker.items.new_item do |item|
-              entry.each {|k, v| item.send("#{k}=", v)}
+              entry.each {|k, v| item.send(:"#{k}=", v)}
             end
           rescue => e
             @logger.error(error: e, entry:)
