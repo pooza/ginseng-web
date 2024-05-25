@@ -7,8 +7,8 @@ module Ginseng
       end
 
       def test_new
-        assert(@renderer.is_a?(Renderer))
-        assert(@renderer.is_a?(XMLRenderer))
+        assert_kind_of(Renderer, @renderer)
+        assert_kind_of(XMLRenderer, @renderer)
       end
 
       def test_type

@@ -24,11 +24,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'slim'
   spec.add_dependency 'tilt', '~>2.1.0'
   spec.add_dependency 'webrick'
-  spec.add_development_dependency 'rack-test'
-  spec.add_development_dependency 'ricecream'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'rubocop-minitest'
-  spec.add_development_dependency 'rubocop-performance'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'test-unit'
 end
