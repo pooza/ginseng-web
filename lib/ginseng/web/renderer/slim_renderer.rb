@@ -52,6 +52,7 @@ module Ginseng
         return {
           '#' => {tag: 'div', attr: 'id'},
           '.' => {tag: 'div', attr: 'class'},
+          '^' => {tag: 'script', attr: 'type'},
         }
       end
 

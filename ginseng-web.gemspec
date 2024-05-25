@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri'] = package['url']
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>=3.1'
+  spec.required_ruby_version = '>=3.2'
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=5.6.4' # CVE-2022-24790
@@ -24,11 +24,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'slim'
   spec.add_dependency 'tilt', '~>2.1.0'
   spec.add_dependency 'webrick'
-  spec.add_development_dependency 'rack-test'
-  spec.add_development_dependency 'ricecream'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'rubocop-minitest'
-  spec.add_development_dependency 'rubocop-performance'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'test-unit'
 end

@@ -16,13 +16,13 @@ module Ginseng
         @feed ||= RSS::Maker.make('rss2.0') do |maker|
           maker.items.do_sort = true
           maker.channel.id = channel[:link]
-          channel.each {|k, v| maker.channel.send("#{k}=", v)}
+          channel.each {|k, v| maker.channel.send(:"#{k}=", v)}
           entries.each do |entry|
             maker.items.new_item do |item|
               if info = fetch_image(entry.dig(:enclosure, :url))
-                info.slice(:type, :length, :url).each {|k, v| item.enclosure.send("#{k}=", v)}
+                info.slice(:type, :length, :url).each {|k, v| item.enclosure.send(:"#{k}=", v)}
               end
-              entry.except(:enclosure).each {|k, v| item.send("#{k}=", v)}
+              entry.except(:enclosure).each {|k, v| item.send(:"#{k}=", v)}
             end
           rescue => e
             @logger.error(error: e, entry:)
