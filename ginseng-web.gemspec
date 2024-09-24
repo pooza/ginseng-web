@@ -23,5 +23,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra'
   spec.add_dependency 'slim'
   spec.add_dependency 'tilt', '~>2.1.0'
-  spec.add_dependency 'webrick', '>=1.8.2' # CVE-2024-47220
 end

@@ -1,5 +1,3 @@
-require 'webrick'
-
 module Ginseng
   module Web
     class HTTP < Ginseng::HTTP
@@ -8,7 +6,14 @@ module Ginseng
       end
 
       def self.parse_header(contents)
-        return ::WEBrick::HTTPUtils.parse_header(contents)
+        headers = {}
+        contents.split(/\r?\n/).each do |line|
+          next unless matches = line.match(/^([^:]+): (.*)$/)
+          name = matches[1].downcase
+          headers[name] ||= []
+          headers[name].push(matches[2])
+        end
+        return headers
       end
     end
   end
