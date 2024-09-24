@@ -16,12 +16,12 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>=3.2'
 
   spec.add_dependency 'erb'
-  spec.add_dependency 'puma', '>=6.4.2' # CVE-2024-21647
+  spec.add_dependency 'puma', '>=6.4.3' # CVE-2024-45614
   spec.add_dependency 'rack', '>=3.1.5' # CVE-2024-39316
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'slim'
   spec.add_dependency 'tilt', '~>2.1.0'
-  spec.add_dependency 'webrick'
+  spec.add_dependency 'webrick', '>=1.8.2' # CVE-2024-47220
 end
