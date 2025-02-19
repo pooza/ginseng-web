@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=6.4.3' # CVE-2024-45614
-  spec.add_dependency 'rack', '>=3.1.5' # CVE-2024-39316
+  spec.add_dependency 'rack', '>=3.1.10' # CVE-2025-25184
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'sinatra', '>=4.1.0' # CVE-2024-21510
