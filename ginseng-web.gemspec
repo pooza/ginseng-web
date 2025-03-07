@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri'] = package['url']
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>=3.2'
+  spec.required_ruby_version = '>=3.3'
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=6.4.3' # CVE-2024-45614
