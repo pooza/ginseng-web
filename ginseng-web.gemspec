@@ -13,11 +13,11 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri'] = package['url']
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>=3.2'
+  spec.required_ruby_version = '>=3.3'
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=6.4.3' # CVE-2024-45614
-  spec.add_dependency 'rack', '>=3.1.10' # CVE-2025-25184
+  spec.add_dependency 'rack', '>=3.1.12' # CVE-2025-27610
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'sinatra', '>=4.1.0' # CVE-2024-21510
