@@ -21,7 +21,7 @@ module Ginseng
         xml.add(REXML::XMLDecl.new('1.0', 'UTF-8'))
         xml.add_element(REXML::Element.new('result'))
         message = xml.root.add_element('message')
-        message.add_text(@message.to_s || 'error')
+        message.add_text(@message.to_s)
         return xml
       end
     end
