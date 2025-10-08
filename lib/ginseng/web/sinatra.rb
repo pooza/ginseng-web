@@ -6,7 +6,7 @@ module Ginseng
       include Package
 
       set :root, Environment.dir
-      set :host_authorization, { permitted_hosts: [] }
+      set :host_authorization, {permitted_hosts: []}
 
       def initialize
         super
