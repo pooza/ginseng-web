@@ -6,6 +6,7 @@ module Ginseng
       include Package
 
       set :root, Environment.dir
+      set :host_authorization, { permitted_hosts: [] }
 
       def initialize
         super
@@ -15,7 +16,7 @@ module Ginseng
 
       before do
         @renderer = default_renderer_class.new
-        @body = request.body.read.to_s
+        @body = request.body.to_s
         @headers = request.env.select {|k, _v| k.start_with?('HTTP_')}.transform_keys do |k|
           k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
         end
