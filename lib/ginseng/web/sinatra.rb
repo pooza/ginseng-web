@@ -21,7 +21,7 @@ module Ginseng
           k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
         end
         begin
-          @params = JSON.parse(@body, symbolize_names: true)
+          @params = JSON.parse(@body, symbolize_names: true) || {}
         rescue
           @params = (params || {}).symbolize_keys
         end
