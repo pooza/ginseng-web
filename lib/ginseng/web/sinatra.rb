@@ -16,14 +16,14 @@ module Ginseng
 
       before do
         @renderer = default_renderer_class.new
-        @body = request.body.to_s
+        @body = request.body.read
         @headers = request.env.select {|k, _v| k.start_with?('HTTP_')}.transform_keys do |k|
           k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
         end
         begin
-          @params = JSON.parse(@body).with_indifferent_access
+          @params = JSON.parse(@body, symbolize_names: true)
         rescue
-          @params = params.with_indifferent_access
+          @params = params.symbolize_keys
         end
         @logger.info(request: {
           method: request.request_method,
