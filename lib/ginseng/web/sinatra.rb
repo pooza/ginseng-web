@@ -23,7 +23,7 @@ module Ginseng
         begin
           @params = JSON.parse(@body, symbolize_names: true)
         rescue
-          @params = params.symbolize_keys
+          @params = (params || {}).symbolize_keys
         end
         @logger.info(request: {
           method: request.request_method,
