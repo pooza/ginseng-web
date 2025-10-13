@@ -16,15 +16,10 @@ module Ginseng
 
       before do
         @renderer = default_renderer_class.new
-        @body = request.body.to_s
-        @headers = request.env.select {|k, _v| k.start_with?('HTTP_')}.transform_keys do |k|
-          k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
-        end
-        begin
-          @params = JSON.parse(@body).with_indifferent_access
-        rescue
-          @params = params.with_indifferent_access
-        end
+        @body = request.body&.read.to_s
+        request.body&.rewind
+        @headers = build_headers
+        @params = build_params
         @logger.info(request: {
           method: request.request_method,
           path: request.path,
@@ -40,6 +35,26 @@ module Ginseng
 
       get '/about' do
         @renderer.message = package_class.full_name
+        return @renderer.to_s
+      end
+
+      get '/test/get' do
+        @renderer = JSONRenderer.new
+        if Environment.test?
+          @renderer.message = @params
+        else
+          @renderer.status = 404
+        end
+        return @renderer.to_s
+      end
+
+      post '/test/post' do
+        @renderer = JSONRenderer.new
+        if Environment.test?
+          @renderer.message = @params
+        else
+          @renderer.status = 404
+        end
         return @renderer.to_s
       end
 
@@ -67,6 +82,21 @@ module Ginseng
 
       def default_renderer_class
         return JSONRenderer
+      end
+
+      def build_headers
+        return request.env.select {|k, _v| k.start_with?('HTTP_')}.transform_keys do |k|
+          k.sub(/^HTTP_/, '').downcase.gsub(/(^|_)\w/, &:upcase).tr('_', '-')
+        end
+      end
+
+      def build_params
+        return (params || {}).to_h.symbolize_keys unless request.media_type == 'application/json'
+        begin
+          return JSON.parse(@body, symbolize_names: true)
+        rescue
+          return {}
+        end
       end
     end
   end
