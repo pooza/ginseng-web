@@ -93,7 +93,8 @@ module Ginseng
       def build_params
         return (params || {}).to_h.symbolize_keys unless request.media_type == 'application/json'
         return JSON.parse(@body, symbolize_names: true)
-      rescue
+      rescue => e
+        @logger.error(error: e)
         return {}
       end
     end
