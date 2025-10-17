@@ -38,7 +38,7 @@ module Ginseng
         return @renderer.to_s
       end
 
-      get '/test/get' do
+      get '/test/get/:code' do
         @renderer = JSONRenderer.new
         if Environment.test?
           @renderer.message = @params
@@ -48,7 +48,7 @@ module Ginseng
         return @renderer.to_s
       end
 
-      post '/test/post' do
+      post '/test/post/:code' do
         @renderer = JSONRenderer.new
         if Environment.test?
           @renderer.message = @params
@@ -91,11 +91,15 @@ module Ginseng
       end
 
       def build_params
-        return (params || {}).to_h.symbolize_keys unless request.media_type == 'application/json'
-        return JSON.parse(@body, symbolize_names: true)
+        @dest = request.GET.to_h.symbolize_keys
+        if request.media_type == 'application/json'
+          @dest.merge!(JSON.parse(@body, symbolize_names: true))
+        end
+        @dest.merge!((env['rack.routing_args'] || {}).symbolize_keys)
+        return @dest
       rescue => e
         @logger.error(error: e)
-        return {}
+        return params.to_h.symbolize_keys
       end
     end
   end

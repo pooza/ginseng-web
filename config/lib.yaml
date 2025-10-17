@@ -6,6 +6,6 @@ package:
     - tkoishi@b-shock.co.jp
   license: MIT
   url: https://github.com/pooza/ginseng-web
-  version: 1.4.0
+  version: 1.4.1
 puma:
   port: 3014
