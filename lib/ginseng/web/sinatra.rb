@@ -91,12 +91,12 @@ module Ginseng
       end
 
       def build_params
-        @dest = request.GET.to_h.symbolize_keys
+        dest = request.GET.to_h
         if request.media_type == 'application/json'
-          @dest.merge!(JSON.parse(@body, symbolize_names: true))
+          dest.merge!(JSON.parse(@body))
         end
-        @dest.merge!((env['rack.routing_args'] || {}).symbolize_keys)
-        return @dest
+        dest.merge!((env['rack.routing_args'] || {}))
+        return dest.deep_symbolize_keys
       rescue => e
         @logger.error(error: e)
         return params.to_h.symbolize_keys
