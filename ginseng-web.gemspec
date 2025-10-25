@@ -17,11 +17,11 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=6.4.3' # CVE-2024-45614
-  spec.add_dependency 'rack', '>=3.1.14' # CVE-2025-46727
-  spec.add_dependency 'rack-session', '>=2.1.1' # CVE-2025-46336
+  spec.add_dependency 'rack', '>=3.2.3' # CVE-2025-61780
+  spec.add_dependency 'rack-session', '>=2.1.1' # CVE-2025-46336 CVE-2025-61919
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
-  spec.add_dependency 'sinatra', '>=4.1.0' # CVE-2024-21510
+  spec.add_dependency 'sinatra', '>=4.2.0' # CVE-2025-61921
   spec.add_dependency 'slim'
   spec.add_dependency 'tilt', '~>2.1.0'
 end

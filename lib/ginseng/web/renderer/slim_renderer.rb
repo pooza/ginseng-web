@@ -4,6 +4,7 @@ module Ginseng
   module Web
     class SlimRenderer < HTMLRenderer
       include Package
+
       attr_reader :params
 
       def initialize(template = nil)

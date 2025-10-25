@@ -4,6 +4,7 @@ module Ginseng
   module Web
     class FeedRenderer < Renderer
       include Package
+
       attr_reader :entries, :channel
 
       def initialize(channel = {})
