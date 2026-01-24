@@ -13,15 +13,15 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri'] = package['url']
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>=3.3'
+  spec.required_ruby_version = '>=3.4'
 
   spec.add_dependency 'erb'
   spec.add_dependency 'puma', '>=6.4.3' # CVE-2024-45614
-  spec.add_dependency 'rack', '>=3.1.14' # CVE-2025-46727
+  spec.add_dependency 'rack', '~>3.1.14' # CVE-2024-46539
   spec.add_dependency 'rack-session', '>=2.1.1' # CVE-2025-46336
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
-  spec.add_dependency 'sinatra', '>=4.1.0' # CVE-2024-21510
+  spec.add_dependency 'sinatra', '~>4.1.0' # CVE-2024-21510
   spec.add_dependency 'slim'
   spec.add_dependency 'tilt', '~>2.1.0'
 end

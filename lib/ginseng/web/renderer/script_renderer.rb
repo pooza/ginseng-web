@@ -2,6 +2,7 @@ module Ginseng
   module Web
     class ScriptRenderer < Renderer
       include Package
+
       attr_reader :name
 
       def name=(name)

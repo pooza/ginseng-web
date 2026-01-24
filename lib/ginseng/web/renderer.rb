@@ -2,6 +2,7 @@ module Ginseng
   module Web
     class Renderer
       include Package
+
       attr_accessor :status
 
       def initialize
