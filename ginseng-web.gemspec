@@ -35,11 +35,15 @@ Gem::Specification.new do |spec|
   # ⚠⚠ **いま上限は無い。** 現行は rack 3.2.6+ / sinatra 4.2.1 が本番 4 台で稼働中
   # （モロヘイヤ v5.33.0 以降、`Controller#verify_token_integrity!` を有効にしたまま）。
   #
-  # 🔴 **この 4 つ（rack / rack-session / sinatra / puma）を触るときは:**
-  #   - **下限を上げるだけ**なら advisory で足りる
-  #     （`gh api "/advisories?ecosystem=rubygems&affects=<gem>&per_page=100"`）
-  #   - ⚠⚠ **上限を入れる／外す・系列をまたぐときは、同時アクセステストを通すこと。**
-  #     postmortem の教訓。2026-02 の再検証は 500 req × 2 並列で不整合 0
+  # 🔴 **この 4 つ（rack / rack-session / sinatra / puma）を触るときは、上から順に見る:**
+  #   1. ⚠⚠ **系列をまたぐなら、同時アクセステストを通すこと。「下限を上げるだけ」でも例外にしない。**
+  #      🔴 例: sinatra `>=4.1.0` → `>=4.2.0` は下限を上げるだけに見えるが 4.1 → 4.2 で系列を
+  #      またぐ。**事故のときの指定がまさに `>=4.2.0` だった。**
+  #   2. ⚠⚠ **上限を入れる／外すときも、同時アクセステストを通すこと。**
+  #      postmortem の教訓。2026-02 の再検証は 500 req × 2 並列で不整合 0
+  #   3. **同じ系列の中で下限を上げるだけ**なら advisory で足りる
+  #      （`gh api "/advisories?ecosystem=rubygems&affects=<gem>&per_page=100"`）
+  #   ⚠ **1 と 3 が重なったら 1 が勝つ**（系列をまたぐ側を採る）。
   #   - 🔴 **advisory は上の事故を知らない。** `sinatra 4.2.0` は CVE-2025-61921 の
   #     修正版だが、**事故の版そのもの**。advisory だけで床を決めない
   #
