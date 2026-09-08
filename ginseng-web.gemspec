@@ -32,7 +32,11 @@ Gem::Specification.new do |spec|
   # ⚠ **ここへ戻さないこと。**戻すと「版を決める場所」と「事故を再現しうる条件を検査できる場所」が
   # また分かれる。⚠ `config/lib.yaml` の `puma.port` は**設定の既定値**なので残してある
   # （gem の依存とは別物）。
-  spec.add_dependency 'erb'
+  # 🔴 4 系列に分かれて修正されている（`< 4.0.3.1` / `= 4.0.4` / `>= 5.0.0, < 6.0.1.1` /
+  # `>= 6.0.2, < 6.0.4`）ので、低い系列の修正版を床にすると**高い系列の未修正版が入る**。
+  # ⚠ `ginseng-core` と同じ床。erb 6.0.4 の required_ruby_version は `>= 3.2` で、
+  # この gem の `>=3.4` を満たす。
+  spec.add_dependency 'erb', '>=6.0.4' # CVE-2026-41316
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'slim'
