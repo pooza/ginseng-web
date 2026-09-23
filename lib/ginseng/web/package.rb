@@ -17,6 +17,13 @@ module Ginseng
         return Logger
       end
 
+      # ⚠⚠ **この gem の Package に直に定義する (#135)。** `Ginseng::Package` を
+      # include して済ませると、**そちらの `http_class` は `Ginseng::HTTP` を返す**
+      # ので既定が `Ginseng::Web::HTTP` から落ちる。
+      def http_class
+        return HTTP
+      end
+
       def template_class
         return Template
       end

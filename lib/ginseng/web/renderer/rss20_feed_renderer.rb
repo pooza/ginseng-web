@@ -3,7 +3,17 @@ module Ginseng
     class RSS20FeedRenderer < FeedRenderer
       def initialize(channel = {})
         super
-        @http = HTTP.new
+        # ⚠⚠ **`HTTP` と直に書かない (#135)。** 字面どおり `Ginseng::Web::HTTP` に
+        # 解決されるので、**利用側が `http_class` を差し替えても黙って無視される**。
+        # 🔴 実測で `mulukhiya-toot-proxy` のフィード描画は、**利用側が足したマスク
+        # （`auth` / `endpoint` / `publickey`）が掛からず**、`cert_file` も gem 同梱の
+        # ものを見ていた（`Ginseng::HTTP#initialize` が `logger_class` /
+        # `config_class` / `environment_class` から読むため。
+        # pooza/ginseng-core#548 と同じ型）。
+        # ⚠ **変わらないもの 2 つ**（リリース前レビューで実測）— 再送上限は下の行で
+        # 無条件に上書きする／syslog のプログラム名は**プロセスに 1 つ**で、
+        # 最初に開いた名前に固定される（`Syslog::Logger` の `@@syslog ||=`）。
+        @http = http_class.new
         @http.retry_limit = 2
         @http.base_uri = channel[:link]
       end
