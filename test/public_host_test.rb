@@ -9,7 +9,7 @@ module Ginseng
       def test_internal_addresses_are_rejected
         internals = [
           '127.0.0.1', '10.0.0.1', '172.16.0.1', '192.168.1.1', '169.254.169.254',
-          '0.0.0.0', '100.64.0.1', '::1', 'fe80::1', 'fc00::1', '::', '::ffff:127.0.0.1'
+          '0.0.0.0', '100.64.0.1', '::1', 'fe80::1', 'fc00::1', 'fec0::1', '::', '::ffff:127.0.0.1'
         ]
 
         internals.each {|ip| assert_nil(allowed('example.com', [ip]), ip)}

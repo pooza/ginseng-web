@@ -35,6 +35,8 @@ module Ginseng
         '::/128',
         '64:ff9b::/96',
         '64:ff9b:1::/48',
+        # ⚠ 非推奨の IPv6 site-local。`private?` は `fc00::/7` しか見ない（#140 Codex P2）。
+        'fec0::/10',
         'ff00::/8',
       ].map {|v| IPAddr.new(v)}.freeze
 
