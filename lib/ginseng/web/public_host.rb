@@ -1,5 +1,6 @@
 require 'ipaddr'
 require 'resolv'
+require 'timeout'
 
 module Ginseng
   module Web
@@ -11,12 +12,15 @@ module Ginseng
     module PublicHost
       IPV4_LITERAL = /\A\d{1,3}(\.\d{1,3}){3}\z/
 
-      # ⚠ 1 回あたりの解決待ちの上限（秒）。⚠⚠ `Addrinfo.getaddrinfo` は timeout を持てず、
-      # 応答を引き延ばす権威 DNS を立てられると描画のスレッドを占有される。
+      # ⚠ 名前解決 1 回ぶん（ホスト 1 つ）の待ちの上限（秒）。⚠⚠ `Addrinfo.getaddrinfo` は
+      # timeout を持てず、応答を引き延ばす権威 DNS を立てられると描画のスレッドを占有される。
       DNS_TIMEOUT = 3
 
       # 名前解決の失敗（環境要因）。⚠ fail-closed で拒否に倒す。
-      RESOLUTION_ERRORS = [SocketError, Resolv::ResolvError, Errno::ENOENT, Errno::ETIMEDOUT].freeze
+      # ⚠ `Timeout::Error` は `resolve_addresses` の締め切り。
+      RESOLUTION_ERRORS = [
+        SocketError, Resolv::ResolvError, Timeout::Error, Errno::ENOENT, Errno::ETIMEDOUT
+      ].freeze
 
       # `IPAddr` の `private?` / `loopback?` / `link_local?` が拾わない予約・特殊用途レンジ。
       # ⚠ **`0.0.0.0` と `::` は 3 述語のいずれも false** なのに、connect(2) はローカルホスト宛と
@@ -68,13 +72,23 @@ module Ginseng
         return RESERVED_RANGES.any? {|range| range.include?(addr)}
       end
 
-      # ⚠ タイムアウトすると空配列が返り、`allowed_address` は拒否に倒れる。
-      def self.resolve_addresses(host)
-        resolver = Resolv::DNS.new
-        resolver.timeouts = DNS_TIMEOUT
-        return resolver.getaddresses(host).map(&:to_s)
-      ensure
-        resolver&.close
+      # ⚠ 解決できなければ空配列か例外になり、`allowed_address` は拒否に倒れる。
+      #
+      # 🔴🔴 **`Resolv::DNS#timeouts=` は問い合わせ 1 回ぶんの上限でしかない (#140 Codex P1)。**
+      # `getaddresses` は A と AAAA を別々に引き、それぞれ**ネームサーバーを 1 台ずつ**待つので、
+      # 応答しない相手には「種別 × ネームサーバー数 × timeout」かかる（実測: 1 秒・3 台で 6 秒）。
+      # ⚠ **全体に 1 本の締め切りを掛ける。** `nameserver:` はテストで応答しない先を指すためのもの。
+      # 🔴🔴 **例外クラスを渡さない。** `Resolv::ResolvTimeout` を渡すと、`Resolv` 自身が
+      # 「問い合わせ 1 回のタイムアウト」として握って次のネームサーバーへ進むので、
+      # **締め切りが効かない**（実測: 掛けたつもりで 18 秒）。既定の形なら中では握れない。
+      def self.resolve_addresses(host, nameserver: nil)
+        return Timeout.timeout(DNS_TIMEOUT) do
+          resolver = nameserver ? Resolv::DNS.new(nameserver:) : Resolv::DNS.new
+          resolver.timeouts = DNS_TIMEOUT
+          resolver.getaddresses(host).map(&:to_s)
+        ensure
+          resolver&.close
+        end
       end
     end
   end

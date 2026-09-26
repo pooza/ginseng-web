@@ -36,6 +36,18 @@ module Ginseng
         assert_nil(PublicHost.allowed_address('example.com', resolver: ->(_) {raise Resolv::ResolvError}))
       end
 
+      # 🔴🔴 **締め切りは解決全体に掛かること (#140 Codex P1)。** 応答しないネームサーバーを
+      # 3 台並べると、問い合わせごとの timeout だけでは 2 種別 × 3 台 × 3 秒 = 18 秒かかる。
+      # ⚠ 192.0.2.0/24（TEST-NET-1）は経路が無く、応答が返らない。
+      def test_resolution_has_a_single_deadline
+        stalled = ['192.0.2.1', '192.0.2.2', '192.0.2.3']
+        started = Time.now
+        resolver = ->(host) {PublicHost.resolve_addresses(host, nameserver: stalled)}
+
+        assert_nil(PublicHost.allowed_address('img.example.com', resolver:))
+        assert_operator(Time.now - started, :<, PublicHost::DNS_TIMEOUT + 1)
+      end
+
       private
 
       def allowed(host, addrs)
