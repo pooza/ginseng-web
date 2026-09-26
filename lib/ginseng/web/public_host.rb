@@ -7,7 +7,7 @@ module Ginseng
     #
     # ⚠⚠ **規則は `mulukhiya-toot-proxy` の `Mulukhiya::RemoteHost` の写し**（本番で
     # 使っている判定）。🔴 **3 つ目の写しを作らないため、正本は ginseng-core へ移す**
-    # （→ pooza/ginseng-core の Issue。`Ginseng::HTTP` の `host_validator` の受け口と同じ gem に置く）。
+    # （→ pooza/ginseng-core#660。`Ginseng::HTTP` の `host_validator` の受け口と同じ gem に置く）。
     module PublicHost
       IPV4_LITERAL = /\A\d{1,3}(\.\d{1,3}){3}\z/
 
