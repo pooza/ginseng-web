@@ -38,6 +38,39 @@ module Ginseng
         assert_instance_of(StubHTTP, StubRenderer.new.instance_variable_get(:@http))
       end
 
+      # 🔴🔴 **`enclosure.url` を内部アドレスへ向けても、既定では接続しない (#138)。**
+      # ⚠⚠ 判定の単体テストだけでは「`fetch_image` が判定を通しているか」は測れないので、
+      # ローカルに実際のサーバーを立て、**接続が来たかどうか**で測る。
+      def test_enclosure_to_an_internal_address_is_not_fetched
+        with_server do |url, hits|
+          renderer = RSS20FeedRenderer.new
+          renderer.push(title: 'x', link: 'https://example.com/', enclosure: {url:})
+          renderer.to_s
+
+          assert_equal(0, hits.size, '内部アドレスへ接続しないこと')
+        end
+      end
+
+      # ⚠ **差し替えの口が効くこと。** nil を返すと検証しない（3.0.2 までの挙動）。
+      # ⚠ これが緑でないと、上のテストは「そもそも取りにいっていない」でも緑になる。
+      def test_image_host_validator_can_be_replaced
+        with_server do |url, hits|
+          renderer = UncheckedRenderer.new
+          renderer.push(title: 'x', link: 'https://example.com/', enclosure: {url:})
+
+          assert_includes(renderer.to_s, 'image/png')
+          assert_equal(1, hits.size)
+        end
+      end
+
+      class UncheckedRenderer < RSS20FeedRenderer
+        private
+
+        def image_host_validator
+          return nil
+        end
+      end
+
       class StubHTTP < HTTP; end
 
       module StubPackage
@@ -50,6 +83,26 @@ module Ginseng
 
       class StubRenderer < RSS20FeedRenderer
         include StubPackage
+      end
+
+      private
+
+      # 127.0.0.1 の空きポートで、来た要求を記録して 200 を返すサーバー。
+      def with_server
+        server = TCPServer.new('127.0.0.1', 0)
+        hits = Queue.new
+        thread = Thread.new do
+          loop do
+            client = server.accept
+            hits.push(client.gets)
+            client.write("HTTP/1.1 200 OK\r\nContent-Type: image/png\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")
+            client.close
+          end
+        end
+        yield "http://127.0.0.1:#{server.addr[1]}/image.png", hits
+      ensure
+        thread&.kill
+        server&.close
       end
     end
   end
