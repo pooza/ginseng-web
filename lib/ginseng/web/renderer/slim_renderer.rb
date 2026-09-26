@@ -35,11 +35,25 @@ module Ginseng
         return @slim.render({}, assign_values)
       end
 
+      # テンプレートの断片（`== slim.render 'fragment/header'`）を描く。
+      #
+      # 🔴🔴 **クラスを直に書かない (#137)。** `SlimRenderer.new` は字面どおり
+      # `Ginseng::Web::SlimRenderer` になり、`create_path` が **gem の `views/`** を探す。
+      # ⚠⚠ 利用側のテンプレートは見つからず、**ページは 200 のままフラグメントだけが
+      # 黙って消えていた**（`mulukhiya-toot-proxy` はこのメソッドを丸ごと写して回避していた）。
+      # `new` ならサブクラスから呼べばそのサブクラスになる。
       def self.render(name, values = {})
-        slim = SlimRenderer.new(name)
-        slim.params.merge!(values)
-        return slim.to_s
-      rescue Ginseng::RenderError
+        return new.render_fragment(name, values)
+      end
+
+      # `render` の本体。⚠ **失敗は nil に倒すが、ログは残す (#137)** — 残さないと
+      # 消えたフラグメントに誰も気づけない。
+      def render_fragment(name, values = {})
+        self.template = name
+        params.merge!(values)
+        return to_s
+      rescue Ginseng::RenderError => e
+        @logger.error(error: e, template: name)
         return nil
       end
 
@@ -60,7 +74,8 @@ module Ginseng
       def assign_values
         return {
           params:,
-          slim: SlimRenderer,
+          # ⚠ 直に書かない (#137)。テンプレートの中の `slim.render` も、利用側のクラスで描く。
+          slim: self.class,
         }
       end
     end
