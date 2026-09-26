@@ -45,7 +45,7 @@ module Ginseng
 
       def fetch_image(uri)
         return nil unless uri
-        response = @http.get(uri)
+        response = @http.get(uri, image_fetch_options)
         return {
           url: uri.to_s,
           type: response.headers['content-type'],
@@ -54,6 +54,21 @@ module Ginseng
       rescue => e
         @logger.error(error: e, uri: uri.to_s)
         return nil
+      end
+
+      # 🔴🔴 **`enclosure.url` は外部（フィードの提供元）が決める値 (#138)。** 検証なしで GET
+      # すると、リンクローカル（`169.254.169.254`）や社内のアドレスへ向けられる（SSRF）。
+      # ⚠ `Ginseng::HTTP` は `host_validator` を渡した経路でだけホップごとに検証する。
+      def image_fetch_options
+        validator = image_host_validator
+        return {} unless validator
+        return {host_validator: validator}
+      end
+
+      # ⚠⚠ **既定は公開アドレスだけ**（`PublicHost`）。社内ネットワークの画像を許す運用では、
+      # 利用側がここを上書きして判定を差し替える（nil を返すと検証しない＝ 3.0.2 までの挙動）。
+      def image_host_validator
+        return PublicHost.validator
       end
     end
   end
