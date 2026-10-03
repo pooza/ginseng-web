@@ -37,6 +37,11 @@ Gem::Specification.new do |spec|
   # ⚠ `ginseng-core` と同じ床。erb 6.0.4 の required_ruby_version は `>= 3.2` で、
   # この gem の `>=3.4` を満たす。
   spec.add_dependency 'erb', '>=6.0.4' # CVE-2026-41316
+  # ⚠⚠ **`Ginseng::Web::PublicHost` が、外部の決めた名前を `Resolv::DNS` で引く (#141)。**
+  # 🔴 床が無いと Ruby 同梱の版（4.0 は 0.7.0・3.4 は 0.7.1）が読み込まれ、悪意のある
+  # DNS 応答でメモリが増え続ける。⚠ 0.7.2 の required_ruby_version は `>= 2.3.0`。
+  # ⚠ **外してよい条件**: 対応する Ruby がすべて 0.7.2 以上を同梱したとき。
+  spec.add_dependency 'resolv', '>=0.7.2' # CVE-2026-80212, CVE-2026-80213
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'slim'

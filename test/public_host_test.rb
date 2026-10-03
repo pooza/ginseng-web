@@ -1,6 +1,8 @@
 module Ginseng
   module Web
-    # 公開アドレスだけを通す判定 (#138)。⚠ DNS は引かず、resolver を差し替えて測る。
+    # 公開アドレスだけを通す判定 (#138 / #141)。⚠ DNS は引かず、resolver を差し替えて測る
+    # （締め切りを見る 2 件だけは、応答しない先へ実際に問い合わせる）。
+    # ⚠ `ginseng-core` の `test/public_host_test.rb` の写し（実装と同じ理由）。
     class PublicHostTest < Test::Unit::TestCase
       def test_public_address_is_returned_for_pinning
         assert_equal('93.184.215.14', allowed('example.com', ['93.184.215.14']))
@@ -13,6 +15,37 @@ module Ginseng
         ]
 
         internals.each {|ip| assert_nil(allowed('example.com', [ip]), ip)}
+      end
+
+      # 🔴 **予約・文書用のレンジも公開ではない (pooza/ginseng-core#660 Codex P1)。** ⚠⚠ IPv4 を埋め込む IPv6
+      # （6to4 の `2002:7f00:1::1` は `127.0.0.1`）は、IPv4 側の表だけでは落ちない。
+      def test_special_purpose_ranges_are_rejected
+        specials = [
+          '192.0.2.1', '192.88.99.1', '198.18.0.1', '198.51.100.1', '203.0.113.1', '224.0.0.1',
+          '255.255.255.255', '64:ff9b::7f00:1', '100::1', '2001::1', '2001:db8::1',
+          '2002:7f00:1::1', '2002:a00:1::1', '3fff::1', '5f00::1', 'ff02::1'
+        ]
+
+        specials.each {|ip| assert_nil(allowed('example.com', [ip]), ip)}
+      end
+
+      # 🔴🔴 **IPv6 は `2000::/3` の外を丸ごと拒否する (pooza/ginseng-core#660 Codex P1・2 巡目)。**
+      # ⚠⚠ 並べる形は足すたびに漏れる — `100:0:0:1::/64`（ダミー）は表に無かった。
+      # ⚠ 末尾の 2 つは**どの予約にも入っていない未割り当て**。表では落とせない。
+      def test_ipv6_outside_global_unicast_is_rejected
+        outsiders = ['100:0:0:1::1', '100::1', '5f00::1', 'fec0::1', '64:ff9b:1::1', '4000::1', 'e000::1']
+
+        outsiders.each {|ip| assert_nil(allowed('example.com', [ip]), ip)}
+      end
+
+      # ⚠ **広げすぎないこと。** 表の隣にある実在の公開アドレスは通す。
+      def test_neighbouring_public_addresses_are_allowed
+        publics = [
+          '8.8.8.8', '192.0.3.1', '192.31.196.1', '198.51.101.1', '203.0.114.1',
+          '2001:200::1', '2001:4860:4860::8888', '2003::1', '2400:cb00::1', '2606:4700::1111'
+        ]
+
+        publics.each {|ip| assert_equal(ip, allowed('example.com', [ip]), ip)}
       end
 
       # ⚠⚠ **1 本でも内部アドレスを含めば拒否**（混ぜて返すのはリバインディングそのもの）。
@@ -46,6 +79,83 @@ module Ginseng
 
         assert_nil(PublicHost.allowed_address('img.example.com', resolver:))
         assert_operator(Time.now - started, :<, PublicHost::DNS_TIMEOUT + 1)
+      end
+
+      def test_public_predicate
+        assert_true(PublicHost.public?('example.com', resolver: ->(_) {['93.184.215.14']}))
+        assert_false(PublicHost.public?('example.com', resolver: ->(_) {['10.0.0.1']}))
+        assert_false(PublicHost.public?('localhost', resolver: ->(_) {['93.184.215.14']}))
+      end
+
+      # 🔴 **受け口まで通すこと。** `HTTP` は拒否（nil）なら要求を出さない。
+      # ⚠⚠ **`assert_raise(GatewayError)` だけでは空振りする** — 拒否を無視しても、
+      # 繋ぎに行った先の接続拒否が同じ `GatewayError` になる。拒否の文言まで見る。
+      def test_rejection_reaches_http
+        error = assert_raise(Ginseng::GatewayError) do
+          Ginseng::HTTP.new.get('http://127.0.0.1/', {host_validator: PublicHost.validator})
+        end
+
+        assert_match(/Rejected host/, error.message)
+      end
+
+      # 🔴 **国際化ドメイン名は punycode へ直してから引く。** ⚠ 直さないと `Resolv` が
+      # `Encoding::CompatibilityError` を上げ、`GatewayError` にならずに漏れる。
+      def test_idn_is_resolved_as_punycode
+        asked = []
+        resolver = lambda do |host|
+          asked.push(host)
+          ['93.184.215.14']
+        end
+
+        assert_equal('93.184.215.14', PublicHost.allowed_address('日本語.jp', resolver:))
+        assert_equal(['xn--wgv71a119e.jp'], asked)
+      end
+
+      # 🔴 **IPv4 の別表記と、名前として壊れた形は解決へ進めない。** ⚠⚠ `127.1` や
+      # `0x7f.1` は 4 オクテットの形ではないが、`getaddrinfo` は `127.0.0.1` と読む。
+      # ⚠ resolver は常に公開アドレスを返す — **呼ばれないこと**を見る。
+      def test_malformed_hosts_never_reach_the_resolver
+        hosts = [
+          '127.1', '0x7f.1', '0x7f.0.0.1', '0177.0.0.1', '00127.0.0.1', '127.0.0.1.', '2130706433',
+          'localhost.', '::ffff:127.0.0.1', '1.2.3.4:80', ' 127.0.0.1', "example.com\n", 'a b.example.com',
+          "#{'a' * 64}.example.com", "#{'a.' * 130}com", 'example.123'
+        ]
+        asked = []
+        resolver = lambda do |host|
+          asked.push(host)
+          ['93.184.215.14']
+        end
+
+        hosts.each {|host| assert_nil(PublicHost.allowed_address(host, resolver:), host.inspect)}
+        assert_empty(asked)
+      end
+
+      # ⚠ 広げすぎないこと。末尾ドット・数字を含むラベル・`_` は通す。
+      def test_ordinary_hosts_reach_the_resolver
+        ['example.com', 'example.com.', '1.example.com', 'a-1.b2.example.org', '_x.example.com', 'EXAMPLE.COM'].each do |host|
+          assert_equal('93.184.215.14', allowed(host, ['93.184.215.14']), host)
+        end
+      end
+
+      # 🔴 **`timeout: nil` で締め切りが外れないこと。** 設定のキーが欠けると `nil` が来る。
+      # ⚠⚠ **別スレッドで走らせ、待つ側に上限を持つ。** 読み替えを外すと締め切りが無くなり、
+      # 同じスレッドで呼ぶと**落ちずに固まる**（変異で実測 — CI が赤ではなくハングする）。
+      def test_nil_timeout_falls_back_to_the_default
+        thread = Thread.new do
+          PublicHost.resolve_addresses('img.example.com', nameserver: ['192.0.2.1'], timeout: nil)
+        rescue Timeout::Error => e
+          e
+        end
+
+        assert_not_nil(thread.join(PublicHost::DNS_TIMEOUT + 1), '締め切りが効くこと')
+        assert_kind_of(Timeout::Error, thread.value)
+      ensure
+        thread&.kill
+      end
+
+      # ⚠ `Errno::*` も拒否に倒す（素のまま漏らさない）。
+      def test_system_call_errors_are_rejected
+        assert_nil(PublicHost.allowed_address('example.com', resolver: ->(_) {raise Errno::EMFILE}))
       end
 
       private
