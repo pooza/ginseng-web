@@ -36,6 +36,9 @@ Gem::Specification.new do |spec|
   # `>= 6.0.2, < 6.0.4`）ので、低い系列の修正版を床にすると**高い系列の未修正版が入る**。
   # ⚠ `ginseng-core` と同じ床。erb 6.0.4 の required_ruby_version は `>= 3.2` で、
   # この gem の `>=3.4` を満たす。
+  # ⚠ `Ginseng::Web::PublicHost` が国際化ドメイン名の正規化に使う (#141)。床は
+  # `ginseng-core` と同じ（CVE-2026-35611）。
+  spec.add_dependency 'addressable', '>=2.9.0' # CVE-2026-35611
   spec.add_dependency 'erb', '>=6.0.4' # CVE-2026-41316
   # ⚠⚠ **`Ginseng::Web::PublicHost` が、外部の決めた名前を `Resolv::DNS` で引く (#141)。**
   # 🔴 床が無いと Ruby 同梱の版（4.0 は 0.7.0・3.4 は 0.7.1）が読み込まれ、悪意のある

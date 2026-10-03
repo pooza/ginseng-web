@@ -1,3 +1,4 @@
+require 'addressable/idna'
 require 'ipaddr'
 require 'resolv'
 require 'timeout'
