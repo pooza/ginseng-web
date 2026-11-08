@@ -48,4 +48,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rss'
   spec.add_dependency 'sassc'
   spec.add_dependency 'slim'
+  # ⚠⚠ **`ginseng-core` の床は 1.23.1（pooza/ginseng-style#120）。** フィードの描画は利用側の
+  # `http_class` を通り（#135 / #136）、`Ginseng::HTTP` はログのマスクを利用側の `config_class` から
+  # 読む。core が既定の名前と設定を**合成**するようになったのは 1.23.1（pooza/ginseng-core#586）で、
+  # それより古い core では、利用側が名前を列挙した時点で**既定の名前が落ちる**。
+  # 🔴 床が無いと `bundle` は通ってしまい、ログに資格情報が出るまで分からない。
+  # ⚠ **外してよい条件は無い。** 上げるのは、core の新しい口に乗ったとき。
+  # 🔴 `ginseng-core` は rubygems.org に無い。**利用側の `Gemfile` に git の参照が要る**
+  # （無ければ解決できずに止まる。いまの利用側は全員書いている）。
+  spec.add_dependency 'ginseng-core', '>=1.23.1'
 end
